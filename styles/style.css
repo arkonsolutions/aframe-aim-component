@@ -1,0 +1,13 @@
+.aim-arrow {
+    position: absolute; 
+    z-index: 100000; 
+    font-size: 50px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0ms ease;
+}
+.aim-arrow.visible {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1050ms ease;
+}
