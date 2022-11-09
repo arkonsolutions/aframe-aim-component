@@ -11,15 +11,22 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
         this.paused = true;
     },
     tick: function() {
-        this._camera = this.el.sceneEl.camera;
-        if (!this.paused && !!this._camera) {
+        if (!this.paused && this._entities.length > 0) {
+            
+            this._camera = this.el.sceneEl.camera;
+            this._containerWidth = window.innerWidth;
+            this._containerHeight = window.innerHeight;
+            let posViewer = new THREE.Vector3(0, 0, (this._camera.near + this._camera.far / 2) * -1);
+            this._camera.localToWorld(posViewer);
+
+            let debouncePercentFactor = 1.05;
+            let debuncedMaxWidth = this._containerWidth * debouncePercentFactor;
+            let debouncedMaxHeight = this._containerHeight * debouncePercentFactor;
+            let debouncedMinWidth = (debuncedMaxWidth - this._containerWidth) * -1;
+            let debouncedMinHeight = (debouncedMaxHeight - this._containerHeight) * -1;
+
             this._entities.filter(e => !e.paused).forEach((entity, eIdx, eArr) => {
-                if (!this._checkIsAtScreen(this._camera, entity.object3D.position)) {
-                    this._containerWidth = window.innerWidth;
-                    this._containerHeight = window.innerHeight;
-    
-                    let posViewer = new THREE.Vector3(0, 0, (this._camera.near + this._camera.far / 2) * -1);
-                    this._camera.localToWorld(posViewer);
+                if (!this._checkIsAtScreen(this._camera, entity.object3D.position)) {    
     
                     //find intersections
                     let line3 = new THREE.Line3();
@@ -33,18 +40,11 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
                             let screenCoordinate = this._vector3ToScreenXY(this._camera, intersectionPoint, this._containerWidth, this._containerHeight);
                             if (!!screenCoordinate) {
     
-                                let debouncePercentFactor = 1.05;
-                                let debuncedMaxWidth = this._containerWidth * debouncePercentFactor;
-                                let debouncedMaxHeight = this._containerHeight * debouncePercentFactor;
-                                let debouncedMinWidth = (debuncedMaxWidth - this._containerWidth) * -1;
-                                let debouncedMinHeight = (debouncedMaxHeight - this._containerHeight) * -1;
-    
                                 //normalize
                                 if (screenCoordinate.x < 0 && screenCoordinate.x >= debouncedMinWidth)
                                     screenCoordinate.x = 0;
                                 if (screenCoordinate.y < 0 && screenCoordinate.y >= debouncedMinHeight)
                                     screenCoordinate.y = 0;
-    
     
                                 if (screenCoordinate.x > this._containerWidth && screenCoordinate.x <= debuncedMaxWidth)
                                     screenCoordinate.x = this._containerWidth;
@@ -54,7 +54,8 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
     
                                 isValidScreenCoordinates = (screenCoordinate.x >= 0) && (screenCoordinate.y >= 0) && (screenCoordinate.x <= this._containerWidth) && (screenCoordinate.y <= this._containerHeight);
                                 if (isValidScreenCoordinates) {
-                                    this._placePointer(entity, screenCoordinate, this._containerWidth, this._containerHeight);
+                                    let angle = this._findAimPointerAngle(screenCoordinate, this._containerWidth, this._containerHeight);
+                                    this._placePointer(entity, screenCoordinate, angle);
                                     //display pointer
                                     entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.classList.toggle("visible", true);
                                 } else {
@@ -72,7 +73,6 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
     },
     registerEntity: function(entity) {
         this._entities.push(entity);
-        console.log('registerEntity', entity);
     },
     unregisterEntity: function(entity) {
         let index = this._entities.indexOf(entity);
@@ -111,8 +111,7 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
         if (theta < 0) theta = 360 + theta; // range [0, 360)
         return theta;
     },
-    _placePointer(entity, screenCoordinate, containerWidth, containerHeight) {
-        let angle = this._findAimPointerAngle(screenCoordinate, containerWidth, containerHeight);
+    _placePointer(entity, screenCoordinate, angle) {
         entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.style.left = `${screenCoordinate.x}px`;
         entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.style.top = `${screenCoordinate.y}px`;
         entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.style.transformOrigin = "0% 0%";
