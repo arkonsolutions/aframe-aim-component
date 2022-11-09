@@ -45,10 +45,16 @@ AFRAME.registerComponent("aim", {
                         let screenCoordinate = this._vector3ToScreenXY(this._camera, intersectionPoint, this._containerWidth, this._containerHeight);
                         if (!!screenCoordinate) {
 
+                            let debouncePercentFactor = 1.05;
+                            let debuncedMaxWidth = this._containerWidth * debouncePercentFactor;
+                            let debouncedMaxHeight = this._containerHeight * debouncePercentFactor;
+                            let debouncedMinWidth = (debuncedMaxWidth - this._containerWidth) * -1;
+                            let debouncedMinHeight = (debouncedMaxHeight - this._containerHeight) * -1;
+
                             //normalize
-                            if (screenCoordinate.x < 0 && screenCoordinate.x > -10)
+                            if (screenCoordinate.x < 0 && screenCoordinate.x > debouncedMinWidth)
                                 screenCoordinate.x = 0;
-                            if (screenCoordinate.y < 0 && screenCoordinate.y > -10)
+                            if (screenCoordinate.y < 0 && screenCoordinate.y > debouncedMinHeight)
                                 screenCoordinate.y = 0;
 
 
