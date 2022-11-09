@@ -58,7 +58,7 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
                                     //display pointer
                                     entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.classList.toggle("visible", true);
                                 } else {
-                                    console.log('not valid', screenCoordinate);
+                                    //console.log('not valid', screenCoordinate);
                                 }
                             }
                         }
@@ -85,8 +85,8 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
         let result = null;
         let pos = vector3.clone();
         let projScreenMat = new THREE.Matrix4();
-        projScreenMat.multiply( camera.projectionMatrix, camera.matrixWorldInverse );
-        projScreenMat.multiplyVector3( pos );
+        projScreenMat.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
+        pos.applyMatrix4(projScreenMat);
 
         let x = ( pos.x + 1 ) * containerWidth / 2;
         let y = ( - pos.y + 1) * containerHeight / 2;
