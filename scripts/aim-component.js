@@ -121,11 +121,11 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
 
 AFRAME.registerComponent(AIM_COMPOMENT_IDENTIFIER, {
     schema: {
-        color: {type:'color', default: 'orange'}
+        color: {type: 'color', default: 'orange'},
+        glyph: {type: 'string', default: '◄'}
     },
     init: function() {
         let pointerEl = document.createElement("div");
-        pointerEl.textContent = `◄`;
         pointerEl.setAttribute("class", "aim-arrow");
         this.pointerEl = pointerEl;
         document.querySelector("body").appendChild(this.pointerEl);
@@ -133,6 +133,7 @@ AFRAME.registerComponent(AIM_COMPOMENT_IDENTIFIER, {
     },
     update: function(oldData) {
         this.pointerEl.style.color = this.data.color;
+        this.pointerEl.textContent = this.data.glyph;
     },
     play: function() {
         this.paused = false;
