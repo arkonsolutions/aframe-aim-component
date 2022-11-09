@@ -11,10 +11,6 @@ A-FRAME component that points entity behind the back by arrow at screen border
 
 # Participation #
 
-This project is only an outline of the component at this point. It is functional enough to understand the concept, but needs to be refined.
-
-Participants are welcome to work together to bring this component to a working state!
-
 There is a thread on the forum where work on this component and existing problems are discussed: 
 
 https://stackoverflow.com/questions/74328030/draw-a-pointer-on-the-edge-of-the-screen-that-points-to-the-target-object-behind
