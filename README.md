@@ -1,7 +1,8 @@
 # aframe-aim-component
 A-FRAME component that points entity behind the back by arrow at screen border
 
-Live example: https://aframe-aim-component.glitch.me/
+* Live example: https://aframe-aim-component.glitch.me/
+* Try in Glitch: https://glitch.com/edit/#!/aframe-aim-component
 # Concept #
 
  This component should help the user understand which way he needs to turn to see the target object, which is not currently on the screen.
