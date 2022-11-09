@@ -52,15 +52,15 @@ AFRAME.registerComponent("aim", {
                             let debouncedMinHeight = (debouncedMaxHeight - this._containerHeight) * -1;
 
                             //normalize
-                            if (screenCoordinate.x < 0 && screenCoordinate.x > debouncedMinWidth)
+                            if (screenCoordinate.x < 0 && screenCoordinate.x >= debouncedMinWidth)
                                 screenCoordinate.x = 0;
-                            if (screenCoordinate.y < 0 && screenCoordinate.y > debouncedMinHeight)
+                            if (screenCoordinate.y < 0 && screenCoordinate.y >= debouncedMinHeight)
                                 screenCoordinate.y = 0;
 
 
-                            if (screenCoordinate.x > this._containerWidth)
+                            if (screenCoordinate.x > this._containerWidth && screenCoordinate.x <= debuncedMaxWidth)
                                 screenCoordinate.x = this._containerWidth;
-                            if (screenCoordinate.y > this._containerHeight)
+                            if (screenCoordinate.y > this._containerHeight && screenCoordinate.y <= debouncedMaxHeight)
                                 screenCoordinate.y = this._containerHeight;
 
 
