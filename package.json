@@ -1,6 +1,6 @@
 {
   "name": "aframe-aim-component",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A-FRAME component that points entity behind the back by arrow at screen border",
   "main": "index.js",
   "scripts": {
