@@ -72,6 +72,7 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
     },
     registerEntity: function(entity) {
         this._entities.push(entity);
+        console.log('registerEntity', entity);
     },
     unregisterEntity: function(entity) {
         let index = this._entities.indexOf(entity);

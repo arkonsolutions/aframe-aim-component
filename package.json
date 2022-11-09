@@ -1,0 +1,38 @@
+{
+  "name": "aframe-aim-component",
+  "version": "1.0.0",
+  "description": "A-FRAME component that points entity behind the back by arrow at screen border",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arkonsolutions/aframe-aim-component.git"
+  },
+  "keywords": [
+    "aframe",
+    "a-frame",
+    "vr",
+    "threejs",
+    "aframe-component",
+    "a-frame-component",
+    "webvr"
+  ],
+  "author": "Sergey Aleksandrovich Wereteychenko (sergey.wereteychenko@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arkonsolutions/aframe-aim-component/issues"
+  },
+  "homepage": "https://github.com/arkonsolutions/aframe-aim-component#readme",
+  "dependencies": {
+    "webpack": "^5.75.0"
+  },
+  "devDependencies": {
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "style-loader": "^3.3.1",
+    "webpack-cli": "^4.10.0"
+  }
+}
