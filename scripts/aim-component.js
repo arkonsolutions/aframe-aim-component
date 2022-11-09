@@ -44,6 +44,20 @@ AFRAME.registerComponent("aim", {
                     if(!!intersectionPoint) {
                         let screenCoordinate = this._vector3ToScreenXY(this._camera, intersectionPoint, this._containerWidth, this._containerHeight);
                         if (!!screenCoordinate) {
+
+                            //normalize
+                            if (screenCoordinate.x < 0 && screenCoordinate.x > -10)
+                                screenCoordinate.x = 0;
+                            if (screenCoordinate.y < 0 && screenCoordinate.y > -10)
+                                screenCoordinate.y = 0;
+
+
+                            if (screenCoordinate.x > this._containerWidth)
+                                screenCoordinate.x = this._containerWidth;
+                            if (screenCoordinate.y > this._containerHeight)
+                                screenCoordinate.y = this._containerHeight;
+
+
                             isValidScreenCoordinates = (screenCoordinate.x >= 0) && (screenCoordinate.y >= 0) && (screenCoordinate.x <= this._containerWidth) && (screenCoordinate.y <= this._containerHeight);
                             if (isValidScreenCoordinates) {
                                 this._placePointer(screenCoordinate, this._containerWidth, this._containerHeight);
