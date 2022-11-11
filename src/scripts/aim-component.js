@@ -122,9 +122,9 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
         let result = null;
         if (!!entity) {
             let mesh = entity.object3DMap.mesh;
-            var geometry = mesh.geometry;
+            let geometry = mesh.geometry;
             geometry.computeBoundingBox();
-            var center = new THREE.Vector3();
+            let center = new THREE.Vector3();
             geometry.boundingBox.getCenter( center );
             mesh.localToWorld( center );
             result = center;
