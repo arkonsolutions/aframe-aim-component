@@ -25,12 +25,13 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
             let debouncedMinWidth = (debuncedMaxWidth - this._containerWidth) * -1;
             let debouncedMinHeight = (debouncedMaxHeight - this._containerHeight) * -1;
 
-            this._entities.filter(e => !e.paused).forEach((entity, eIdx, eArr) => {
-                if (!this._checkIsAtScreen(this._camera, entity.object3D.position)) {    
+            this._entities.filter(e => !e.components[AIM_COMPOMENT_IDENTIFIER].paused).forEach((entity, eIdx, eArr) => {
+                let entityCenterPoint = this._getEntityCenterPoint(entity);
+                if (!!entityCenterPoint && !this._checkIsAtScreen(this._camera, entityCenterPoint)) {    
     
                     //find intersections
                     let line3 = new THREE.Line3();
-                    line3.set(posViewer, entity.object3D.position);
+                    line3.set(posViewer, entityCenterPoint);
                     let intersectionPoint = new THREE.Vector3();
     
                     let isValidScreenCoordinates = false;
@@ -78,11 +79,11 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
         let index = this._entities.indexOf(entity);
         this._entities.splice(index, 1);
     },
-    _checkIsAtScreen(camera, pointVector3) {
+    _checkIsAtScreen: function(camera, pointVector3) {
         this._frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
         return this._frustum.containsPoint(pointVector3);
     },
-    _vector3ToScreenXY(camera, vector3, containerWidth, containerHeight) {
+    _vector3ToScreenXY: function(camera, vector3, containerWidth, containerHeight) {
         let result = null;
         let pos = vector3.clone();
         let projScreenMat = new THREE.Matrix4();
@@ -98,7 +99,7 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
 
         return result;
     },
-    _findAimPointerAngle(pointerXYCoordinate, containerWidth, containerHeight) {
+    _findAimPointerAngle: function(pointerXYCoordinate, containerWidth, containerHeight) {
         let cx = pointerXYCoordinate.x;
         let cy = pointerXYCoordinate.y;
         let ex = containerWidth / 2;
@@ -111,11 +112,24 @@ AFRAME.registerSystem(AIM_COMPOMENT_IDENTIFIER, {
         if (theta < 0) theta = 360 + theta; // range [0, 360)
         return theta;
     },
-    _placePointer(entity, screenCoordinate, angle) {
+    _placePointer: function(entity, screenCoordinate, angle) {
         entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.style.left = `${screenCoordinate.x}px`;
         entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.style.top = `${screenCoordinate.y}px`;
         entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.style.transformOrigin = "0% 0%";
         entity.components[AIM_COMPOMENT_IDENTIFIER].pointerEl.style.transform = `rotate(${angle}deg) translate(0%, -50%)`;
+    },
+    _getEntityCenterPoint: function(entity){
+        let result = null;
+        if (!!entity) {
+            let mesh = entity.object3DMap.mesh;
+            var geometry = mesh.geometry;
+            geometry.computeBoundingBox();
+            var center = new THREE.Vector3();
+            geometry.boundingBox.getCenter( center );
+            mesh.localToWorld( center );
+            result = center;
+        }
+        return result;
     }
 });
 
